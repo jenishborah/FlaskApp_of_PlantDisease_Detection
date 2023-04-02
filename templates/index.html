@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Plant Disease Detector</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+      }
+      h1 {
+        color: #555;
+        text-align: center;
+        margin-top: 50px;
+      }
+      form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 30px;
+      }
+      input[type=file] {
+        margin-bottom: 20px;
+      }
+      button[type=submit] {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      button[type=submit]:hover {
+        background-color: #3e8e41;
+      }
+      #prediction {
+        color: #555;
+        font-size: 18px;
+        font-weight: bold;
+        text-align: center;
+        margin-top: 30px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Plant Disease Detector</h1>
+    <form method="post" action="/predict" enctype="multipart/form-data">
+      <label for="image">Select an image:</label>
+      <br>
+      <br>
+      <input type="file" id="image" name="image">
+      <button type="submit">Detect Disease</button>
+      <br>
+      <br>
+    </form>
+    <p id="prediction"></p>
+    <script>
+      const form = document.querySelector('form');
+      const prediction = document.querySelector('#prediction');
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const formData = new FormData(form);
+        const response = await fetch('/predict', {
+          method: 'POST',
+          body: formData,
+        });
+        const predictedClass = await response.text();
+        prediction.textContent = `The predicted class is ${predictedClass}`;
+      });
+    </script>
+  </body>
+</html>
